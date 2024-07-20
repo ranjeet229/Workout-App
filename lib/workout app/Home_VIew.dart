@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todo_app/workout%20app/description.dart';
 import 'package:todo_app/workout%20app/welocme_View.dart';
+import 'package:todo_app/workout%20app/workout_page.dart';
 
 import '../model/category.dart';
 
@@ -54,6 +55,12 @@ class _HomeViewState extends State<HomeView> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => WelcomeView()),
+      );
+    }
+    if(index == 1){
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context)=> WorkoutPage()),
       );
     }
     if(index == 2){
@@ -111,7 +118,7 @@ class _HomeViewState extends State<HomeView> {
                         color: Color(0xFF40D876),
                       ),
                       image: DecorationImage(
-                        image: AssetImage("assets/images/w5.jpg"),
+                        image: AssetImage("assets/images/w4.jpg"),
                         fit: BoxFit.cover,
                       ),
                     ),
