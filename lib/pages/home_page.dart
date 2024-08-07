@@ -33,10 +33,17 @@ class _HomePageState extends State<HomePage> {
     final prefs = await SharedPreferences.getInstance();
     final todoList = prefs.getStringList('todos') ?? [];
     final imagePath = prefs.getString('imageFilePath');
+    final checkedItems = prefs.getStringList('checkedItems') ?? [];
 
     setState(() {
       _todos.addAll(todoList);
       _filteredTodos.addAll(todoList);
+      for (var item in checkedItems) {
+        final parts = item.split('|');
+        if (parts.length == 2) {
+          _checkedItems[parts[0]] = parts[1] == 'true';
+        }
+      }
       if (imagePath != null) {
         imageFile = File(imagePath);
       }
@@ -46,6 +53,10 @@ class _HomePageState extends State<HomePage> {
   void _saveTodos() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setStringList('todos', _todos);
+    final checkedItems = _checkedItems.entries
+        .map((entry) => '${entry.key}|${entry.value}')
+        .toList();
+    prefs.setStringList('checkedItems', checkedItems);
   }
 
   void _saveImagePath(String path) async {
@@ -101,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                     selectImage(ImageSource.gallery);
                   },
                 ),
-            
+
                 ListTile(
                   leading: Icon(Icons.photo_camera),
                   title: Text('Take a photo'),
@@ -279,6 +290,7 @@ class _HomePageState extends State<HomePage> {
                     onChanged: (newBool) {
                       setState(() {
                         _checkedItems[todo] = newBool!;
+                        _saveTodos();
                       });
                     },
                     secondary: Container(
